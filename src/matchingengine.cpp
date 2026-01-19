@@ -4,6 +4,71 @@
 #include <sstream>
 using namespace std;
 
+bool checkPreference(vector<vector<int>> studentPreference, int n, int s, int h, int currentMatch) {
+    for (int i = 0; i < n; i++) {
+        //Student prefers h over current match since h is a higher rank
+        if (studentPreference[s][i] == h) {
+            return true;
+        }
+        //Student does not prefer h over current match, h is a lower rank
+        if (studentPreference[s][i] == currentMatch) {
+            return false;
+        }
+    }
+    return true;
+}
+
+vector<int> stableMatching(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, int n) {
+    //Initialize all n hospitals and n students to be free (-1)
+    vector<int> hospitalMatching(n, -1);
+    vector<int> studentMatching(n, -1);
+
+    int numFreeHospitals = n;
+
+    //While some hospital is free
+    while (numFreeHospitals > 0) {
+        //Choose such a hospital h
+        int h = -1;
+        for (int i = 0; i < n; i++) {
+            if (hospitalMatching[i] == -1) {
+                h = i;
+                //Once the first free hospital is found, stop searching
+                break;
+            }
+        }
+
+        //Find student on h's list to whom h has not been matched to
+        for (int i = 0; i < n && hospitalMatching[h] == -1; i++) {
+            int s = hospitalPreference[h][i];
+
+            //If student is free
+            if (studentMatching[s - 1] == -1) {
+                //Assign hospital and student to each other
+                studentMatching[s - 1] = h + 1;
+                hospitalMatching[h] = s;
+
+                //One less free hospital
+                numFreeHospitals--;
+            }
+            //Else If student is not free
+            else if (studentMatching[s - 1] != -1) {
+                //This is the hospital currently assigned to student
+                int currentMatch = studentMatching[s - 1];
+
+                //If it is true that student prefers h to current assignment
+                if (checkPreference(studentPreference, n, s - 1, h + 1, currentMatch)) {
+                    //Assign student and h, "current assignment" hospital has a slot free
+                    hospitalMatching[currentMatch - 1] = -1;
+                    studentMatching[s - 1] = h + 1;
+                    hospitalMatching[h] = s;
+                }
+                //If false, student keeps current assignment
+            }
+        }
+    }
+    return hospitalMatching;
+}
+
 int main() {
     //User can drop a file into src and enter the filename
     string inputFile;
@@ -56,6 +121,7 @@ int main() {
         }
     }
 
+    //Check for extra values in the file, must have equal number of hospitals and students
     int extra;
     if (file >> extra) {
         cout << "Invalid input!" << endl;
@@ -63,6 +129,26 @@ int main() {
     }
 
     file.close();
+
+    //Do the stable matching algorithm
+    vector<int> hospitalMatching = stableMatching(hospitalPreference, studentPreference, n);
+
+    //Output to a file
+    string outputFile;
+    cout << "Enter output file:" << endl;
+    getline(cin, outputFile);
+
+    ofstream output(outputFile);
+    if (!output) {
+        cout << "Error opening file!" << endl;
+        return -1;
+    }
+
+    for (int i = 0; i < n; i++) {
+        output << (i + 1) << " " << hospitalMatching[i] << endl;
+    }
+
+    output.close();
 
     return 0;
 }
