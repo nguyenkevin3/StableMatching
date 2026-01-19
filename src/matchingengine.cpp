@@ -2,7 +2,6 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <direct.h>
 using namespace std;
 
 int main() {
