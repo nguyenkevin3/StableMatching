@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <utility>
 using namespace std;
 
 bool checkPreference(vector<vector<int>> studentPreference, int n, int s, int h, int currentMatch) {
@@ -87,7 +88,7 @@ bool isValid(vector<int> hospitalMatching) {
     return true;
 }
 
-bool isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, vector<int> hospitalMatching, int n) {
+pair <int, int> isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, vector<int> hospitalMatching, int n) {
     //For every hospital h
     for (int h = 0; h < hospitalPreference.size(); h++) {
         int currentMatch = hospitalMatching[h];
@@ -99,12 +100,14 @@ bool isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studen
             }
             //If student s prefers h over their current match, return false
             if (checkPreference(studentPreference, n, s, h + 1, currentMatch)) {
-                return false;
+                pair<int, int> unstable = {h+1, s+1};
+                return unstable;
             }
         }
 
     }
-    return true;
+    pair<int, int> stable = {-1, -1};
+    return stable;
 }
 
 int main() {
@@ -194,14 +197,21 @@ int main() {
 
     if (userInput == "y") {
         if (isValid(hospitalMatching)) {
-            cout << "Valid!" << endl;
+            cout << "VALID!" << endl;
         }
         else {
             cout << "INVALID: Duplicate student!" << endl;
         }
-        //if (isStable()) {}
-    }
+        pair <int, int> stable = isStable(hospitalPreference, studentPreference, hospitalMatching, n);
+        pair <int, int> perfect = {-1, -1};
+        if (stable != perfect) {
+            cout << "UNSTABLE PAIR: Hospital: " << stable.first << " and Student: " << stable.second << endl;  
+        }
+        else {
+            cout << "STABLE! " << endl;
+        }
 
+    }
 
     return 0;
 }
