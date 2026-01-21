@@ -87,7 +87,21 @@ bool isValid(vector<int> hospitalMatching) {
     return true;
 }
 
-bool isStable() {
+bool isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, vector<int> hospitalMatching, int n) {
+    //For every hospital h
+    for (int h = 0; h < hospitalPreference.size(); h++) {
+        int currentMatch = hospitalMatching[h];
+
+        //For every student s that hospital h would prefer over their current match
+        for (int s = 0; s < hospitalPreference[h].size(); s++) {
+            if (hospitalPreference[h][s] == currentMatch) {
+                break;
+            }
+            //If student s prefers h over their current match, return false
+
+        }
+
+    }
     return true;
 }
 
@@ -180,6 +194,10 @@ int main() {
         if (isValid(hospitalMatching)) {
             cout << "Valid!" << endl;
         }
+        else {
+            cout << "INVALID: Duplicate student!" << endl;
+        }
+        if (isStable()) {}
     }
 
 
