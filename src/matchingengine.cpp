@@ -69,8 +69,30 @@ vector<int> stableMatching(vector<vector<int>> hospitalPreference, vector<vector
     return hospitalMatching;
 }
 
+bool isValid(vector<int> hospitalMatching) {
+    //Keep track of students already matched
+    vector<bool> isStudentMatched(hospitalMatching.size(), false);
+
+    for (int i = 0; i < hospitalMatching.size(); i++) {
+        //Student is chosen
+        int s = hospitalMatching[i] - 1;
+
+        //If that student has already been matched; there is a duplicate
+        if (isStudentMatched[s]) {
+            return false;
+        }
+
+        isStudentMatched[s] = true;
+    }
+    return true;
+}
+
+bool isStable() {
+    return true;
+}
+
 int main() {
-    //User can drop a file into src and enter the filename
+    //User can drop a file into cmake-build-debug and enter the filename
     string inputFile;
     cout << "Enter input file:" << endl;
     getline(cin, inputFile);
@@ -149,6 +171,17 @@ int main() {
     }
 
     output.close();
+
+    string userInput;
+    cout << "Do you want to verify that the matching is valid and stable? (y/n):" << endl;
+    getline(cin, userInput);
+
+    if (userInput == "y") {
+        if (isValid(hospitalMatching)) {
+            cout << "Valid!" << endl;
+        }
+    }
+
 
     return 0;
 }
