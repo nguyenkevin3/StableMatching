@@ -118,7 +118,7 @@ int main() {
         return -1;
     }
 
-    //Credits to stack overflow "Checking for an empty file in C++"
+    //Checking for empty file
     if (file.peek() == ifstream::traits_type::eof()) {
         cout << "Empty file!" << endl;
         return -1;
@@ -197,7 +197,7 @@ int main() {
         else {
             cout << "INVALID: Duplicate student!" << endl;
         }
-        if (isStable()) {}
+
     }
 
 
