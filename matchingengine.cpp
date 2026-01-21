@@ -120,7 +120,7 @@ int main() {
         return -1;
     }
 
-    //Checking for empty file
+    //Checking for an empty file
     if (file.peek() == ifstream::traits_type::eof()) {
         cout << "Empty file!" << endl;
         return -1;
@@ -199,7 +199,7 @@ int main() {
         else {
             cout << "INVALID: Duplicate student!" << endl;
         }
-
+        //if (isStable()) {}
     }
 
 
