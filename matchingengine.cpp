@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <utility>
+#include <unordered_set>
 using namespace std;
 
 bool checkPreference(vector<vector<int>> studentPreference, int n, int s, int h, int currentMatch) {
@@ -19,7 +20,7 @@ bool checkPreference(vector<vector<int>> studentPreference, int n, int s, int h,
     return true;
 }
 
-vector<int> stableMatching(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, int n) {
+pair<vector<int>, vector<int>> stableMatching(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, int n) {
     //Initialize all n hospitals and n students to be free (-1)
     vector<int> hospitalMatching(n, -1);
     vector<int> studentMatching(n, -1);
@@ -67,7 +68,8 @@ vector<int> stableMatching(vector<vector<int>> hospitalPreference, vector<vector
             }
         }
     }
-    return hospitalMatching;
+    pair<vector<int>,vector<int>> matching = {hospitalMatching, studentMatching};
+    return matching;
 }
 
 bool isValid(vector<int> hospitalMatching) {
@@ -88,7 +90,8 @@ bool isValid(vector<int> hospitalMatching) {
     return true;
 }
 
-pair <int, int> isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, vector<int> hospitalMatching, int n) {
+pair <int, int> isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, vector<int> hospitalMatching,
+    vector<int> studentMatching, int n) {
     //For every hospital h
     for (int h = 0; h < hospitalPreference.size(); h++) {
         int currentMatch = hospitalMatching[h];
@@ -98,8 +101,8 @@ pair <int, int> isStable(vector<vector<int>> hospitalPreference, vector<vector<i
             if (hospitalPreference[h][s] == currentMatch) {
                 break;
             }
-            //If student s prefers h over their current match, return false
-            if (checkPreference(studentPreference, n, s, h + 1, currentMatch)) {
+            //If student s prefers h over their current match
+            if (checkPreference(studentPreference, n, s, h+1, studentMatching[s])) {
                 pair<int, int> unstable = {h+1, s+1};
                 return unstable;
             }
@@ -170,9 +173,38 @@ int main() {
     }
 
     file.close();
+    // Check for duplicates in hospital preference list
+    for (vector<int> hospRank : hospitalPreference){
+        unordered_set<int> unique = {};        
+        for (int student : hospRank){
+            if (unique.find(student) != unique.end()){
+                cout << "Duplicate Input!" << endl;
+                return -1;
+            }
+            else{
+                unique.insert(student);
+            }
+        }
+    }
+    // Check for duplicates in student preference list
+    for (vector<int> studRank : studentPreference){
+        unordered_set<int> unique = {};        
+        for (int hospital : studRank){
+            if (unique.find(hospital) != unique.end()){
+                cout << "Duplicate Input!" << endl;
+                return -1;
+            }
+            else{
+                unique.insert(hospital);
+            }
+        }
+    }
+
 
     //Do the stable matching algorithm
-    vector<int> hospitalMatching = stableMatching(hospitalPreference, studentPreference, n);
+    pair<vector<int>, vector<int>> matching = stableMatching(hospitalPreference, studentPreference, n);
+    vector<int> hospitalMatching = matching.first;
+    vector<int> studentMatching = matching.second;
 
     //Output to a file
     string outputFile;
@@ -202,7 +234,7 @@ int main() {
         else {
             cout << "INVALID: Duplicate student!" << endl;
         }
-        pair <int, int> stable = isStable(hospitalPreference, studentPreference, hospitalMatching, n);
+        pair <int, int> stable = isStable(hospitalPreference, studentPreference, hospitalMatching, studentMatching, n);
         pair <int, int> perfect = {-1, -1};
         if (stable != perfect) {
             cout << "UNSTABLE PAIR: Hospital: " << stable.first << " and Student: " << stable.second << endl;  
