@@ -98,7 +98,9 @@ bool isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studen
                 break;
             }
             //If student s prefers h over their current match, return false
-
+            if (checkPreference(studentPreference, n, s, h + 1, currentMatch)) {
+                return false;
+            }
         }
 
     }
@@ -106,7 +108,7 @@ bool isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studen
 }
 
 int main() {
-    //User can drop a file into cmake-build-debug and enter the filename
+    //User can drop a file into directory and enter the filename
     string inputFile;
     cout << "Enter input file:" << endl;
     getline(cin, inputFile);
