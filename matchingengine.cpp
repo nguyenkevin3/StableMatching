@@ -106,7 +106,7 @@ bool isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studen
 }
 
 int main() {
-    //User can drop a file into cmake-build-debug and enter the filename
+    //User can drop a file into directory and enter the filename
     string inputFile;
     cout << "Enter input file:" << endl;
     getline(cin, inputFile);
@@ -118,7 +118,7 @@ int main() {
         return -1;
     }
 
-    //Checking for empty file
+    //Checking for an empty file
     if (file.peek() == ifstream::traits_type::eof()) {
         cout << "Empty file!" << endl;
         return -1;
@@ -197,7 +197,7 @@ int main() {
         else {
             cout << "INVALID: Duplicate student!" << endl;
         }
-
+        //if (isStable()) {}
     }
 
 

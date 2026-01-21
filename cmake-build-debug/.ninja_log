@@ -1,7 +1,0 @@
-# ninja log v6
-3	322	7907106081339357	build.ninja	88cb23726049cc7a
-3	322	7907106081288097	C:/Users/kevin/CLionProjects/StableMatching/cmake-build-debug/cmake_install.cmake	88cb23726049cc7a
-40	1113	7907103437097298	CMakeFiles/StableMatching.dir/src/matchingengine.cpp.obj	9736dc351df3ece9
-1115	1424	7907103447844515	StableMatching.exe	dcf5f9bca97f77d8
-3	1110	7907113143506559	CMakeFiles/StableMatching.dir/src/matchingengine.cpp.obj	9736dc351df3ece9
-1111	1376	7907113154575373	StableMatching.exe	dcf5f9bca97f77d8
