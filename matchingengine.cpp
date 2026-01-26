@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 #include <sstream>
 #include <utility>
 #include <unordered_set>
@@ -21,56 +22,50 @@ bool checkPreference(vector<vector<int>> studentPreference, int n, int s, int h,
 }
 
 pair<vector<int>, vector<int>> stableMatching(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, int n) {
-    //Initialize all n hospitals and n students to be free (-1)
-    vector<int> hospitalMatching(n, -1);
-    vector<int> studentMatching(n, -1);
-
-    int numFreeHospitals = n;
-
-    //While some hospital is free
-    while (numFreeHospitals > 0) {
-        //Choose such a hospital h
+    vector<int> hospitalMatching(n, 0);
+    vector<int> studentMatching(n, 0);
+    while (true){
         int h = -1;
-        for (int i = 0; i < n; i++) {
-            if (hospitalMatching[i] == -1) {
-                h = i;
-                //Once the first free hospital is found, stop searching
+        for (int i = 0; i < n; i++){
+            if(hospitalMatching[i] < 1){
+                h = i+1;
                 break;
             }
         }
+        if (h == -1){
+            break;
+        }
+        int a = hospitalPreference[h-1][-hospitalMatching[h-1]];
+        
+        if (studentMatching[a-1] == 0){
+            hospitalMatching[h-1] = a;
+            studentMatching[a-1] = h;
+        }
+        else {
+            int currentMatch = studentMatching[a-1];
 
-        //Find student on h's list to whom h has not been matched to
-        for (int i = 0; i < n && hospitalMatching[h] == -1; i++) {
-            int s = hospitalPreference[h][i];
-
-            //If student is free
-            if (studentMatching[s - 1] == -1) {
-                //Assign hospital and student to each other
-                studentMatching[s - 1] = h + 1;
-                hospitalMatching[h] = s;
-
-                //One less free hospital
-                numFreeHospitals--;
-            }
-            //Else If student is not free
-            else if (studentMatching[s - 1] != -1) {
-                //This is the hospital currently assigned to student
-                int currentMatch = studentMatching[s - 1];
-
-                //If it is true that student prefers h to current assignment
-                if (checkPreference(studentPreference, n, s - 1, h + 1, currentMatch)) {
-                    //Assign student and h, "current assignment" hospital has a slot free
-                    hospitalMatching[currentMatch - 1] = -1;
-                    studentMatching[s - 1] = h + 1;
-                    hospitalMatching[h] = s;
+            if (checkPreference(studentPreference, n, a-1, h, currentMatch)) {                
+                studentMatching[a-1] = h;
+                hospitalMatching[h-1] = a;
+                
+                int nexta = 0;
+                for(int i = 0; i < n; i++) {
+                    if (hospitalPreference[currentMatch-1][i] == a) {
+                        nexta = i+1; 
+                        break;
+                    }
                 }
-                //If false, student keeps current assignment
+                hospitalMatching[currentMatch-1] = -nexta;
+            } 
+            else {
+                hospitalMatching[h-1]--;
             }
         }
     }
-    pair<vector<int>,vector<int>> matching = {hospitalMatching, studentMatching};
-    return matching;
+    return {hospitalMatching, studentMatching};
 }
+
+
 
 bool isValid(vector<int> hospitalMatching) {
     //Keep track of students already matched
@@ -97,20 +92,19 @@ pair <int, int> isStable(vector<vector<int>> hospitalPreference, vector<vector<i
         int currentMatch = hospitalMatching[h];
 
         //For every student s that hospital h would prefer over their current match
-        for (int s = 0; s < hospitalPreference[h].size(); s++) {
-            if (hospitalPreference[h][s] == currentMatch) {
+        for (int i = 0; i < hospitalPreference[h].size(); i++) {
+            int s = hospitalPreference[h][i];
+            if (s == currentMatch) {
                 break;
             }
             //If student s prefers h over their current match
-            if (checkPreference(studentPreference, n, s, h+1, studentMatching[s])) {
-                pair<int, int> unstable = {h+1, s+1};
-                return unstable;
+            if (checkPreference(studentPreference, n, s-1, h+1, studentMatching[s-1])) {
+                return {h+1, s};
             }
         }
 
     }
-    pair<int, int> stable = {-1, -1};
-    return stable;
+    return {-1, -1};
 }
 
 int main() {

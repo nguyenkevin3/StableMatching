@@ -2,7 +2,7 @@ Project: Stable Matching Algorithm and Verifier
 
 Team:
   1) Kevin Nguyen 93349993
-  2) Noelio Perez [UFID]
+  2) Noelio Perez 77647747
 
 Instructions to compile: **g++ required to build**
   1) Clone the repository
