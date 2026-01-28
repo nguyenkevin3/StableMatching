@@ -74,14 +74,14 @@ pair <int, int> isStable(vector<vector<int>> hospitalPreference, vector<vector<i
         int currentMatch = hospitalMatching[h];
 
         //For every student s that hospital h would prefer over their current match
-        for (int s = 0; s < hospitalPreference[h].size(); s++) {
-            if (hospitalPreference[h][s] == currentMatch) {
+        for (int i = 0; i < hospitalPreference[h].size(); i++) {
+            int s = hospitalPreference[h][i];
+            if (s == currentMatch) {
                 break;
             }
             //If student s prefers h over their current match
-            if (checkPreference(studentPreference, n, s, h+1, studentMatching[s])) {
-                pair<int, int> unstable = {h+1, s+1};
-                return unstable;
+            if (checkPreference(studentPreference, n, s-1, h+1, studentMatching[s-1])) {
+                return {h+1, s};
             }
         }
 
