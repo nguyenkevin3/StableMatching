@@ -7,10 +7,10 @@ Team:
 Instructions to compile: **g++ required to build**
   1) Clone the repository
   2) Navigate to project directory
-  3) Run: g++ matchingengine.cpp -o matchingengine
+  3) Run: g++ -std=c++17 matchingengine.cpp -o matchingengine
   4) Drag and drop input files into the directory (example.in is already provided)
   5) Input files must be of ".in" type
-  6) Run: g++ verifier.cpp -o verifier
+  6) Run: g++ -std=c++17 verifier.cpp -o verifier
 
 Instructions to use matcher:
   1) Run: ./matchingengine [input file] (Ex: ./matchingengine example.in)
