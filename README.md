@@ -22,6 +22,6 @@ Instructions to use verifier:
   3) Validity and stability results will be displayed
 
 Scalability:
-![Matching Engine Graph](./engine.png)
-![Verifier Graph](./verifier.png)
+![Matching Engine Graph](./graphs/engine.png)
+![Verifier Graph](./graphs/verifier.png)
 The trend in both graphs is clearly polynomial, approximately close to $O(n^2)$
