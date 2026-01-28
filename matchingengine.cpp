@@ -5,6 +5,7 @@
 #include <sstream>
 #include <utility>
 #include <unordered_set>
+#include <string>
 using namespace std;
 
 bool checkPreference(vector<vector<int>> studentPreference, int n, int s, int h, int currentMatch) {
@@ -65,53 +66,17 @@ pair<vector<int>, vector<int>> stableMatching(vector<vector<int>> hospitalPrefer
     return {hospitalMatching, studentMatching};
 }
 
+int main(int argc, char *argv[]) {
 
-
-bool isValid(vector<int> hospitalMatching) {
-    //Keep track of students already matched
-    vector<bool> isStudentMatched(hospitalMatching.size(), false);
-
-    for (int i = 0; i < hospitalMatching.size(); i++) {
-        //Student is chosen
-        int s = hospitalMatching[i] - 1;
-
-        //If that student has already been matched; there is a duplicate
-        if (isStudentMatched[s]) {
-            return false;
-        }
-
-        isStudentMatched[s] = true;
+    if (argc != 2){
+        cout << "Invalid arguments!" << endl;
+        return -1;
     }
-    return true;
-}
-
-pair <int, int> isStable(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, vector<int> hospitalMatching,
-    vector<int> studentMatching, int n) {
-    //For every hospital h
-    for (int h = 0; h < hospitalPreference.size(); h++) {
-        int currentMatch = hospitalMatching[h];
-
-        //For every student s that hospital h would prefer over their current match
-        for (int i = 0; i < hospitalPreference[h].size(); i++) {
-            int s = hospitalPreference[h][i];
-            if (s == currentMatch) {
-                break;
-            }
-            //If student s prefers h over their current match
-            if (checkPreference(studentPreference, n, s-1, h+1, studentMatching[s-1])) {
-                return {h+1, s};
-            }
-        }
-
+    string inputFile = argv[1];
+    if (inputFile.length() < 4 || inputFile.substr(inputFile.length() - 3) != ".in"){
+        cout << "Invalid file format!" << endl;
+        return -1;
     }
-    return {-1, -1};
-}
-
-int main() {
-    //User can drop a file into directory and enter the filename
-    string inputFile;
-    cout << "Enter input file:" << endl;
-    getline(cin, inputFile);
 
     ifstream file(inputFile);
     //Check if failed to open file
@@ -201,9 +166,8 @@ int main() {
     vector<int> studentMatching = matching.second;
 
     //Output to a file
-    string outputFile;
-    cout << "Enter output file:" << endl;
-    getline(cin, outputFile);
+    string outputFile = argv[1];
+    outputFile.replace(outputFile.length() - 2, 2, "out");
 
     ofstream output(outputFile);
     if (!output) {
@@ -216,28 +180,6 @@ int main() {
     }
 
     output.close();
-
-    string userInput;
-    cout << "Do you want to verify that the matching is valid and stable? (y/n):" << endl;
-    getline(cin, userInput);
-
-    if (userInput == "y") {
-        if (isValid(hospitalMatching)) {
-            cout << "VALID!" << endl;
-        }
-        else {
-            cout << "INVALID: Duplicate student!" << endl;
-        }
-        pair <int, int> stable = isStable(hospitalPreference, studentPreference, hospitalMatching, studentMatching, n);
-        pair <int, int> perfect = {-1, -1};
-        if (stable != perfect) {
-            cout << "UNSTABLE PAIR: Hospital: " << stable.first << " and Student: " << stable.second << endl;  
-        }
-        else {
-            cout << "STABLE! " << endl;
-        }
-
-    }
 
     return 0;
 }
