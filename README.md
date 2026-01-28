@@ -9,12 +9,16 @@ Instructions to compile: **g++ required to build**
   2) Navigate to project directory
   3) Run: g++ matchingengine.cpp -o matchingengine
   4) Drag and drop input files into the directory (example.in is already provided)
-  5) Run: ./matchingengine
+  5) Input files must be of ".in" type
+  6) Run: g++ verifier.cpp -o verifier
 
-Instructions to use matcher and verifier:
-  1) You will be asked to enter an input file, type the name (ex: example.in)
-  2) You will be asked to enter an output file to be generated, type the name (ex: test.out)
-  3) If you want to verify the matching, type 'y', else type 'n'
-  4) If yes, the verifier will output the validity and stability of the matching.
+Instructions to use matcher:
+  1) Run: ./matchingengine [input file] (Ex: ./matchingengine example.in)
+  2) An output file will be automatically generated in the same directory
+
+Instructions to use verifier
+  4) Run: ./verifier [output file] [input file] (Ex: ./verifier example.out example.in)
+  5) [output file] to use is the one generated from the matchingengine
+  6) Validity and stability results will be displayed
 
 Scalability:
