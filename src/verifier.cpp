@@ -37,16 +37,6 @@ vector<int> isValid(vector<int> hospitalMatching, vector<int> studentMatching) {
         hospitalMap[hospitalMatching[i]].push_back(i);
         studentMap[studentMatching[i]].push_back(i);
     }
-    // for (auto& [h, indices] : hospitalMap){
-    //     if (indices.size() > 1){
-    //         return {indices[0], indices[1], 0};
-    //     }
-    // }
-    // for (auto& [s, indices] : studentMap){
-    //     if (indices.size() > 1){
-    //         return {indices[0], indices[1], 1};
-    //     }
-    // }
     for (auto& pair : hospitalMap) {
         auto& h = pair.first;
         auto& indices = pair.second;
