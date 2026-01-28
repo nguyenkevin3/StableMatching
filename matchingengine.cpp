@@ -23,9 +23,13 @@ bool checkPreference(vector<vector<int>> studentPreference, int n, int s, int h,
 }
 
 pair<vector<int>, vector<int>> stableMatching(vector<vector<int>> hospitalPreference, vector<vector<int>> studentPreference, int n) {
+    //Initialize each person and hospital to be free/unmatched 
     vector<int> hospitalMatching(n, 0);
     vector<int> studentMatching(n, 0);
+    
+    //While (some hospital is free and hasn't been matched/assigned to every applicant) 
     while (true){
+        //Choose such a hospital h 
         int h = -1;
         for (int i = 0; i < n; i++){
             if(hospitalMatching[i] < 1){
@@ -36,16 +40,22 @@ pair<vector<int>, vector<int>> stableMatching(vector<vector<int>> hospitalPrefer
         if (h == -1){
             break;
         }
+        //a= 1st applicant on h's list to whom h has not been matched 
         int a = hospitalPreference[h-1][-hospitalMatching[h-1]];
-        
+
+        //If a is free, assign h and a 
         if (studentMatching[a-1] == 0){
             hospitalMatching[h-1] = a;
             studentMatching[a-1] = h;
         }
+
+        //Else
         else {
             int currentMatch = studentMatching[a-1];
 
-            if (checkPreference(studentPreference, n, a-1, h, currentMatch)) {                
+            //If a prefers h to her/his current assignment h'
+            if (checkPreference(studentPreference, n, a-1, h, currentMatch)) {
+                //Assign a and h, and h' has a slot free 
                 studentMatching[a-1] = h;
                 hospitalMatching[h-1] = a;
                 
