@@ -16,9 +16,9 @@ Instructions to use matcher:
   1) Run: ./matchingengine [input file] (Ex: ./matchingengine example.in)
   2) An output file will be automatically generated in the same directory
 
-Instructions to use verifier
-  4) Run: ./verifier [output file] [input file] (Ex: ./verifier example.out example.in)
-  5) [output file] to use is the one generated from the matchingengine
-  6) Validity and stability results will be displayed
+Instructions to use verifier:
+  1) Run: ./verifier [output file] [input file] (Ex: ./verifier example.out example.in)
+  2) [output file] to use is the one generated from the matchingengine
+  3) Validity and stability results will be displayed
 
 Scalability:
